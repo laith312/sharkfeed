@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Shark Feed</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="swipe_text">Swipe to Start Feeding</string>
+
+    <string name="flickr">949e98778755d1982f537d56236bbb42</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
