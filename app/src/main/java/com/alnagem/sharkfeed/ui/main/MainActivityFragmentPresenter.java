@@ -45,8 +45,8 @@ public class MainActivityFragmentPresenter extends BaseMVPPresenter<MainActivity
                         if (currentPhoto.has("url_t")) {
                             flickrPhoto.setThumbnailUrl(currentPhoto.getString("url_t"));
                         }
-                        if (currentPhoto.has("url_l")) {
-                            flickrPhoto.setFullUrl(currentPhoto.getString("url_l"));
+                        if (currentPhoto.has("url_c")) {
+                            flickrPhoto.setFullUrl(currentPhoto.getString("url_c"));
                         }
 
                         searchResults.add(flickrPhoto);

@@ -76,7 +76,6 @@ public class AdapterSharkSearch extends RecyclerView.Adapter<AdapterSharkSearch.
 
         @Override
         public void onClick(View v) {
-            Log.e("zzz", "click 1");
             mListener.onClick(v, getAdapterPosition());
         }
     }

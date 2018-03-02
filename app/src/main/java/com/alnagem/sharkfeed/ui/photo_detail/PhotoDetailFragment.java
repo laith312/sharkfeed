@@ -66,7 +66,6 @@ public class PhotoDetailFragment extends BaseMVPFragment<PhotoDetailFragmentView
 
     @Override
     public void setImageUrl(String imageUrl) {
-        Log.e("zzz", "setImageURL : " + imageUrl);
         Picasso.with(getContext()).load(imageUrl).into(flickrImage);
     }
 }

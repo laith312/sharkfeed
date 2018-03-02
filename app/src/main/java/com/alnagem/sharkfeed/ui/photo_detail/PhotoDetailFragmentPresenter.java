@@ -64,11 +64,14 @@ public class PhotoDetailFragmentPresenter extends BaseMVPPresenter<PhotoDetailFr
     }
 
     private void setViewImageUrl() {
-        getMvpView().setImageUrl(photoDetail.getFullUrl());
+        if (getMvpView() != null && photoDetail != null) {
+            getMvpView().setImageUrl(photoDetail.getFullUrl());
+        }
     }
 
     void setPhoto(FlickrPhoto photo) {
         this.photoDetail = photo;
+        updateUI();
         fetchPhotoDetails();
     }
 }
