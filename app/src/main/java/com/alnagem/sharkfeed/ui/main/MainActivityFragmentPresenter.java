@@ -3,7 +3,7 @@ package com.alnagem.sharkfeed.ui.main;
 import android.util.Log;
 
 import com.alnagem.sharkfeed.model.FlickrPhoto;
-import com.alnagem.sharkfeed.network.Flickr;
+import com.alnagem.sharkfeed.network.FlickrAPI;
 import com.alnagem.sharkfeed.views.base.BaseMVPPresenter;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainActivityFragmentPresenter extends BaseMVPPresenter<MainActivityFragmentView> {
 
-    List<FlickrPhoto> searchResults = new ArrayList<>();
+    private List<FlickrPhoto> searchResults = new ArrayList<>();
 
     @Override
     protected void onMvpViewAttached() {
@@ -30,20 +30,13 @@ public class MainActivityFragmentPresenter extends BaseMVPPresenter<MainActivity
         fetchSharksFromFlickr();
     }
 
-    public void fetchSharksFromFlickr() {
-
-        Log.e("zzzz", "fetchSharksFromFlickr");
-
-        Response.Listener<String> successResponse = new Response.Listener<String>() {
+    void fetchSharksFromFlickr() {
+        Response.Listener<JSONObject> successResponse = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                JSONObject jsonResponse = null;
-                JSONObject photos = null;
-                JSONArray photosAry = null;
+            public void onResponse(JSONObject response) {
                 try {
-                    jsonResponse = new JSONObject(response);
-                    photos = jsonResponse.getJSONObject("photos");
-                    photosAry = photos.getJSONArray("photo");
+                    JSONObject photos = response.getJSONObject("photos");
+                    JSONArray photosAry = photos.getJSONArray("photo");
 
                     for (int i = 0; i < photosAry.length(); i++) {
                         JSONObject currentPhoto = photosAry.getJSONObject(i);
@@ -52,10 +45,8 @@ public class MainActivityFragmentPresenter extends BaseMVPPresenter<MainActivity
                             searchResults.add(new FlickrPhoto(currentPhoto.getString("id"), currentPhoto.getString("url_t")));
                         }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e("zzz", "JSON ERROR!!!!");
                 }
 
                 updateUI();
@@ -66,16 +57,16 @@ public class MainActivityFragmentPresenter extends BaseMVPPresenter<MainActivity
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("zzz", error.getLocalizedMessage());
+                Log.e("MainFragmentPresenter", "Network Error:" + error.getLocalizedMessage());
             }
         };
 
-        Flickr.sharkSearch(successResponse, errorListener);
+        FlickrAPI.sharkSearch(successResponse, errorListener);
     }
 
     public void updateUI() {
-        Log.e("zzz", "updateUI");
         getMvpView().updateSearchResults(searchResults);
         getMvpView().stopRefresh();
     }
+
 }

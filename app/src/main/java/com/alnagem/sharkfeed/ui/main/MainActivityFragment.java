@@ -4,6 +4,7 @@ package com.alnagem.sharkfeed.ui.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import com.alnagem.sharkfeed.R;
 import com.alnagem.sharkfeed.model.FlickrPhoto;
 import com.alnagem.sharkfeed.ui.GridSpacingItemDecoration;
+import com.alnagem.sharkfeed.ui.OnSearchItemClickListener;
+import com.alnagem.sharkfeed.ui.photo_detail.PhotoDetailFragment;
 import com.alnagem.sharkfeed.views.base.BaseMVPFragment;
 
 import java.util.ArrayList;
@@ -36,13 +39,26 @@ public class MainActivityFragment extends BaseMVPFragment<MainActivityFragmentVi
     private AdapterSharkSearch searchAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
 
-        searchAdapter = new AdapterSharkSearch(new ArrayList<FlickrPhoto>(), R.layout.item_shark_search, getContext());
+        OnSearchItemClickListener listener = new OnSearchItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                PhotoDetailFragment newFragment = new PhotoDetailFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("id", searchAdapter.getData(position).getId());
+                newFragment.setArguments(bundle);
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.fragment_container, newFragment, searchAdapter.getData(position).getId())
+                        .addToBackStack(searchAdapter.getData(position).getId()).commit();
+            }
+        };
+
+        searchAdapter = new AdapterSharkSearch(new ArrayList<FlickrPhoto>(), R.layout.item_shark_search, getContext(), listener);
         recyclerView.setAdapter(searchAdapter);
 
         RecyclerView.LayoutManager lm = new GridLayoutManager(getContext(), 3);
