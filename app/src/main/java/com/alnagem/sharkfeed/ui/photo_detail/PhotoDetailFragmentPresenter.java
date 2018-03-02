@@ -2,13 +2,12 @@ package com.alnagem.sharkfeed.ui.photo_detail;
 
 import android.util.Log;
 
-import com.alnagem.sharkfeed.model.FlickrPhotoDetail;
+import com.alnagem.sharkfeed.model.FlickrPhoto;
 import com.alnagem.sharkfeed.network.FlickrAPI;
 import com.alnagem.sharkfeed.views.base.BaseMVPPresenter;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,8 +17,7 @@ import org.json.JSONObject;
 
 public class PhotoDetailFragmentPresenter extends BaseMVPPresenter<PhotoDetailFragmentView> {
 
-    String photoId;
-    FlickrPhotoDetail photoDetail;
+    FlickrPhoto photoDetail;
 
     @Override
     protected void onMvpViewAttached() {
@@ -35,22 +33,8 @@ public class PhotoDetailFragmentPresenter extends BaseMVPPresenter<PhotoDetailFr
 
                 try {
                     JSONObject jsonPhoto = response.getJSONObject("photo");
-
-                    String id = jsonPhoto.getString("id");
-                    String description = jsonPhoto.getString("description");
-                    String imageUrl = "";
-
-                    JSONObject jsonObjectPhotoUrls = jsonPhoto.getJSONObject("urls");
-                    JSONArray jsonPhotoUrls = jsonObjectPhotoUrls.getJSONArray("url");
-
-                    for (int i = 0; i < jsonPhotoUrls.length(); i++) {
-                        imageUrl = jsonPhotoUrls.getJSONObject(i).getString("_content");
-                        if (jsonPhotoUrls.getJSONObject(i).getString("type").equalsIgnoreCase("photopage")) {
-                            break;
-                        }
-                    }
-
-                    photoDetail = new FlickrPhotoDetail(id, description, imageUrl);
+                    String description = jsonPhoto.getJSONObject("description").getString("_content");
+                    photoDetail.setDescription(description);
                     updateUI();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -67,7 +51,7 @@ public class PhotoDetailFragmentPresenter extends BaseMVPPresenter<PhotoDetailFr
         };
 
 
-        FlickrAPI.photoInfo(photoId, successResponse, errorListener);
+        FlickrAPI.photoInfo(photoDetail.getId(), successResponse, errorListener);
     }
 
     private void updateUI() {
@@ -80,11 +64,11 @@ public class PhotoDetailFragmentPresenter extends BaseMVPPresenter<PhotoDetailFr
     }
 
     private void setViewImageUrl() {
-        getMvpView().setImageUrl(photoDetail.getImageUrl());
+        getMvpView().setImageUrl(photoDetail.getFullUrl());
     }
 
-    public void setPhotoId(String id) {
-        this.photoId = id;
+    public void setPhoto(FlickrPhoto photo) {
+        this.photoDetail = photo;
         fetchPhotoDetails();
     }
 }

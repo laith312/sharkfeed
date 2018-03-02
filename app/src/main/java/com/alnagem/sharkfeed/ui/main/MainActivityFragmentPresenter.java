@@ -40,10 +40,16 @@ public class MainActivityFragmentPresenter extends BaseMVPPresenter<MainActivity
 
                     for (int i = 0; i < photosAry.length(); i++) {
                         JSONObject currentPhoto = photosAry.getJSONObject(i);
-
+                        FlickrPhoto flickrPhoto = new FlickrPhoto();
+                        flickrPhoto.setId(currentPhoto.getString("id"));
                         if (currentPhoto.has("url_t")) {
-                            searchResults.add(new FlickrPhoto(currentPhoto.getString("id"), currentPhoto.getString("url_t")));
+                            flickrPhoto.setThumbnailUrl(currentPhoto.getString("url_t"));
                         }
+                        if (currentPhoto.has("url_l")) {
+                            flickrPhoto.setFullUrl(currentPhoto.getString("url_l"));
+                        }
+
+                        searchResults.add(flickrPhoto);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

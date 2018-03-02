@@ -50,7 +50,7 @@ public class MainActivityFragment extends BaseMVPFragment<MainActivityFragmentVi
                 PhotoDetailFragment newFragment = new PhotoDetailFragment();
 
                 Bundle bundle = new Bundle();
-                bundle.putString("id", searchAdapter.getData(position).getId());
+                bundle.putSerializable("photo", searchAdapter.getData(position));
                 newFragment.setArguments(bundle);
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 ft.add(R.id.fragment_container, newFragment, searchAdapter.getData(position).getId())

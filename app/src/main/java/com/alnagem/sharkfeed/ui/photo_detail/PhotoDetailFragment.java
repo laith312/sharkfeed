@@ -1,9 +1,9 @@
 package com.alnagem.sharkfeed.ui.photo_detail;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alnagem.sharkfeed.R;
+import com.alnagem.sharkfeed.model.FlickrPhoto;
 import com.alnagem.sharkfeed.views.base.BaseMVPFragment;
 import com.squareup.picasso.Picasso;
 
@@ -42,8 +43,8 @@ public class PhotoDetailFragment extends BaseMVPFragment<PhotoDetailFragmentView
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
-        String id = bundle.getString("id");
-        getPresenter().setPhotoId(id);
+        FlickrPhoto photo = (FlickrPhoto) bundle.getSerializable("photo");
+        getPresenter().setPhoto(photo);
     }
 
     @NonNull
@@ -65,6 +66,7 @@ public class PhotoDetailFragment extends BaseMVPFragment<PhotoDetailFragmentView
 
     @Override
     public void setImageUrl(String imageUrl) {
+        Log.e("zzz", "setImageURL : " + imageUrl);
         Picasso.with(getContext()).load(imageUrl).into(flickrImage);
     }
 }
