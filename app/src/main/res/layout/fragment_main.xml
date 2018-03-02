@@ -7,8 +7,6 @@
     tools:context=".ui.main.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <!--<include layout="@layout/view_swipe_splash" />-->
-
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="0dp"
@@ -45,6 +43,10 @@
             android:paddingTop="10dp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include
+        android:id="@+id/launch_view"
+        layout="@layout/view_swipe_splash" />
 
 
 </android.support.constraint.ConstraintLayout>

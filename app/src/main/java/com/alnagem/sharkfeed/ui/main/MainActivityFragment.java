@@ -3,6 +3,7 @@ package com.alnagem.sharkfeed.ui.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +17,7 @@ import com.alnagem.sharkfeed.R;
 import com.alnagem.sharkfeed.model.FlickrPhoto;
 import com.alnagem.sharkfeed.ui.GridSpacingItemDecoration;
 import com.alnagem.sharkfeed.ui.OnSearchItemClickListener;
+import com.alnagem.sharkfeed.ui.SwipeDismissTouchListener;
 import com.alnagem.sharkfeed.ui.photo_detail.PhotoDetailFragment;
 import com.alnagem.sharkfeed.views.base.BaseMVPFragment;
 
@@ -25,10 +27,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainActivityFragment extends BaseMVPFragment<MainActivityFragmentView, MainActivityFragmentPresenter> implements MainActivityFragmentView, SwipeRefreshLayout.OnRefreshListener {
+
+    @BindView(R.id.launch_view)
+    ConstraintLayout launchView;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -66,6 +73,21 @@ public class MainActivityFragment extends BaseMVPFragment<MainActivityFragmentVi
 
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 24, true));
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        launchView.setOnTouchListener(new SwipeDismissTouchListener(
+                launchView,
+                null,
+                new SwipeDismissTouchListener.DismissCallbacks() {
+                    @Override
+                    public boolean canDismiss(Object token) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismiss(View view, Object token) {
+                        launchView.setVisibility(GONE);
+                    }
+                }));
 
         return view;
     }
